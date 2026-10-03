@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>ACCT 2302 — Quiz 2 Reviewer (Sessions 5–8)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #1a2938; --paper: #f4f1e8; --cream: #faf8f2; --sun: #ffd400; --ochre: #8a6a00;
+        --red: #b0302a; --green: #2f6b3a; --soft: #e7e2d2; --line: #d6cfbb; --muted: #6b6558;
+        --card: #ffffff; --body: #33302a; --note-fg: #3f3a30; --hdr: #1a2938; --hdr-fg: #f4f1e8;
+        --ok-bg: #ebf4ea; --ok-sh: #c8e0c6; --bad-bg: #fbecea; --bad-sh: #f0cbc6;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --ink: #ece6d6; --paper: #232c36; --cream: #141a21; --ochre: #e0b84a; --red: #ef8a82; --green: #86c991;
+          --soft: #212a34; --line: #36414d; --muted: #a39d8f; --card: #1a222b; --body: #d9d3c4; --note-fg: #d9d3c4;
+          --hdr: #0d1217; --hdr-fg: #f4f1e8; --ok-bg: #1c3223; --ok-sh: #284a32; --bad-bg: #38201e; --bad-sh: #552c29;
+        }
+      }
+      :root[data-theme="dark"] {
+        --ink: #ece6d6; --paper: #232c36; --cream: #141a21; --ochre: #e0b84a; --red: #ef8a82; --green: #86c991;
+        --soft: #212a34; --line: #36414d; --muted: #a39d8f; --card: #1a222b; --body: #d9d3c4; --note-fg: #d9d3c4;
+        --hdr: #0d1217; --hdr-fg: #f4f1e8; --ok-bg: #1c3223; --ok-sh: #284a32; --bad-bg: #38201e; --bad-sh: #552c29;
+      }
+      html { scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--cream); }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { background: var(--cream); color: var(--ink); font-family: "Lora", Georgia, serif; min-height: 100vh; }
+
+      .topbar { height: 5px; background: repeating-linear-gradient(90deg, var(--sun) 0 30px, var(--hdr) 30px 34px); }
+
+      header { background: var(--hdr); color: var(--hdr-fg); padding: 2.5rem 2rem 2rem; text-align: center; position: relative; overflow: hidden; }
+      header::before { content: "₱"; position: absolute; font-family: "Playfair Display", Georgia, serif; font-size: 18rem; line-height: 1; opacity: 0.06; top: -3rem; left: -1rem; color: var(--sun); pointer-events: none; }
+      header h1 { font-family: "Playfair Display", Georgia, serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; line-height: 1.1; margin-bottom: 0.4rem; }
+      header p { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.12em; color: var(--sun); text-transform: uppercase; margin-top: 0.5rem; }
+
+      .score-banner { background: var(--soft); border-bottom: 1px solid var(--line); padding: 0.7rem 2rem; display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; }
+      .score-banner .stat { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: flex; gap: 0.5rem; align-items: center; }
+      .score-banner .stat strong { color: var(--ink); font-size: 1rem; }
+
+      nav { display: flex; background: var(--soft); border-bottom: 2px solid var(--ink); overflow-x: auto; scrollbar-width: none; }
+      nav::-webkit-scrollbar { display: none; }
+      nav button { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.85rem 1.2rem; border: none; background: transparent; color: var(--muted); cursor: pointer; border-right: 1px solid var(--line); white-space: nowrap; transition: all 0.2s; position: relative; }
+      nav button::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--sun); transform: scaleX(0); transition: transform 0.2s; }
+      nav button:hover { color: var(--ink); background: rgba(255, 212, 0, 0.12); }
+      nav button.active { color: var(--ink); font-weight: 500; }
+      nav button.active::after { transform: scaleX(1); }
+      nav button:focus-visible, .btn:focus-visible, .option-btn:focus-visible, .session-header:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+
+      main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+      .section-title { font-family: "Playfair Display", Georgia, serif; font-size: 1.6rem; margin-bottom: 0.3rem; }
+      .section-sub { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem; }
+      .note { background: var(--paper); border: 1px dashed var(--ochre); padding: 0.8rem 1.1rem; font-size: 0.85rem; line-height: 1.6; color: var(--note-fg); margin-bottom: 1.5rem; }
+      .note strong { color: var(--ochre); }
+      .progress-bar { height: 4px; background: var(--soft); margin-bottom: 1.5rem; border-radius: 2px; overflow: hidden; }
+      .progress-fill { height: 100%; background: var(--ink); transition: width 0.4s ease; width: 0%; }
+
+      .ch-divider { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ochre); margin: 2.4rem 0 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--soft); }
+      .ch-divider.first { margin-top: 0; }
+
+      .q-card { background: var(--card); border: 1px solid var(--line); border-radius: 2px; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; box-shadow: 2px 2px 0 var(--soft); }
+      .q-card.answered-ok { border-color: var(--green); background: var(--ok-bg); box-shadow: 2px 2px 0 var(--ok-sh); }
+      .q-card.answered-bad { border-color: var(--red); background: var(--bad-bg); box-shadow: 2px 2px 0 var(--bad-sh); }
+      .q-num { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.68rem; color: var(--ochre); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.6rem; display: flex; justify-content: space-between; gap: 1rem; }
+      .q-num .mark.ok { color: var(--green); font-weight: 500; }
+      .q-num .mark.bad { color: var(--red); font-weight: 500; }
+      .q-text { font-size: 0.95rem; line-height: 1.65; margin-bottom: 1rem; font-weight: 600; }
+      .options { display: flex; flex-direction: column; gap: 0.5rem; }
+      .option-btn { text-align: left; background: var(--cream); border: 1.5px solid var(--line); border-radius: 2px; padding: 0.6rem 1rem; font-family: "Lora", Georgia, serif; font-size: 0.88rem; cursor: pointer; transition: all 0.15s; color: var(--ink); line-height: 1.5; }
+      .option-btn:hover:not(:disabled) { background: var(--soft); border-color: var(--ink); }
+      .option-btn.correct { background: var(--ok-bg); border-color: var(--green); color: var(--green); font-weight: 600; }
+      .option-btn.wrong { background: var(--bad-bg); border-color: var(--red); color: var(--red); }
+      .option-btn:disabled { cursor: default; opacity: 1; }
+      .option-btn:disabled:not(.correct):not(.wrong) { background: var(--cream); color: var(--muted); }
+      .feedback { margin-top: 0.7rem; font-size: 0.85rem; font-style: italic; color: var(--muted); display: none; line-height: 1.6; }
+      .feedback.show { display: block; }
+
+      .btn { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1.4rem; border: 2px solid var(--ink); background: var(--ink); color: var(--cream); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+      .btn:hover { background: var(--sun); border-color: var(--sun); color: #1a2938; }
+      .btn.outline { background: transparent; color: var(--ink); }
+      .btn.outline:hover { background: var(--ink); color: var(--cream); }
+      .quiz-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; flex-wrap: wrap; gap: 1rem; }
+      .quiz-controls .btns { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+      .score-badge { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.85rem; color: var(--muted); }
+
+      .result-box { background: var(--paper); border: 1px solid var(--line); padding: 1.5rem 2rem; text-align: center; margin-top: 2rem; display: none; }
+      .result-box.show { display: block; }
+      .result-box .big { font-family: "Playfair Display", Georgia, serif; font-size: 2.8rem; font-weight: 700; line-height: 1; margin-bottom: 0.4rem; }
+      .result-box .breakdown { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 0.8rem; }
+      .result-box .msg { font-size: 0.9rem; font-style: italic; color: var(--muted); margin-bottom: 1.2rem; }
+      .chapter-scores { font-family: "DM Mono", ui-monospace, monospace; font-size: 0.72rem; color: var(--muted); line-height: 1.9; margin-bottom: 1.2rem; text-align: left; display: inline-block; }
+
+      .session-card { background: var(--card); border: 1px solid var(--line); border-radius: 2px; margin-bottom: 1.5rem; box-shadow: 2px 2px 0 var(--soft); overflow: hidden; }
+      .session-header { width: 100%; border: none; text-align: left; font: inherit; background: var(--hdr); color: var(--hdr-fg); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; gap: 1rem; }
+      .session-header h2 { font-family: "Playfair Display", Georgia, serif; font-size: 1.05rem; font-weight: 700; }
+      .session-header .tag { font-family: "DM Mono", ui-monospace, monospace; color: var(--sun); font-size: 1rem; }
+      .session-body { padding: 1.5rem; display: none; }
+      .session-body.open { display: block; }
+      .session-body h3 { font-family: "Playfair Display", Georgia, serif; font-size: 1rem; color: var(--ink); margin: 1.3rem 0 0.5rem; border-left: 3px solid var(--sun); padding-left: 0.6rem; }
+      .session-body h3:first-child { margin-top: 0; }
+      .session-body p { font-size: 0.92rem; line-height: 1.75; color: var(--body); margin-bottom: 0.7rem; }
+      .session-body ul, .session-body ol { padding-left: 1.3rem; margin-bottom: 0.7rem; }
+      .session-body li { font-size: 0.92rem; line-height: 1.7; color: var(--body); margin-bottom: 0.35rem; }
+      .quote-block { background: var(--paper); border-left: 4px solid var(--sun); padding: 1rem 1.2rem; margin: 1rem 0; font-style: italic; font-size: 0.9rem; line-height: 1.8; color: var(--note-fg); }
+      .formula { background: var(--hdr); color: var(--hdr-fg); font-family: "DM Mono", ui-monospace, monospace; font-size: 0.82rem; line-height: 1.7; padding: 0.9rem 1.1rem; margin: 0.9rem 0; border-left: 4px solid var(--sun); overflow-x: auto; white-space: pre; }
+      .tbl-wrap { overflow-x: auto; margin: 0.8rem 0 1rem; }
+      .tbl { border-collapse: collapse; width: 100%; font-size: 0.85rem; color: var(--body); }
+      .tbl th, .tbl td { border: 1px solid var(--line); padding: 0.45rem 0.65rem; text-align: left; vertical-align: top; line-height: 1.5; }
+      .tbl th { background: var(--soft); font-family: "DM Mono", ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); font-weight: 500; }
+      .tbl td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      @media (max-width: 600px) {
+        nav button { padding: 0.7rem 0.9rem; font-size: 0.65rem; }
+        .score-banner { gap: 1.2rem; padding: 0.6rem 1rem; }
+        .q-card { padding: 1.1rem 1.1rem; }
+        .session-body { padding: 1.1rem; }
+      }
+      @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+    </style>
+  </head>
+  <body>
+    <div class="topbar"></div>
+    <header>
+      <h1>ACCT 2302<br /><em>Quiz 2 Reviewer</em></h1>
+      <p>Sessions 5 to 8 &nbsp;|&nbsp; Quiz 2 on Session 9 &nbsp;|&nbsp; Asian Institute of Management</p>
+    </header>
+
+    <div class="score-banner" id="score-banner">
+      <div class="stat"><strong id="s-right">0</strong> Correct</div>
+      <div class="stat"><strong id="s-wrong">0</strong> Wrong</div>
+      <div class="stat"><strong id="s-done">0</strong> / <span id="s-total">0</span> Answered</div>
+    </div>
+
+    <nav id="nav"></nav>
+
+    <main>
+      <div id="notes-panel" style="display:none">
+        <div class="section-title">Notes</div>
+        <div class="section-sub">Sessions 5 to 8 | Tap a session to open it</div>
+
+        <div class="session-card">
+          <button class="session-header" onclick="toggleSession(this)" aria-expanded="false"><h2>Session 5 — Job-Order Costing</h2><span class="tag">＋</span></button>
+          <div class="session-body">
+            <h3>Cost accumulation systems</h3>
+            <p>A <strong>cost accumulation (product costing) system</strong> collects DM, DL and factory overhead and assigns them to cost objects. It is needed for inventory valuation and income determination (external) and for setting prices (internal). Two steps: <strong>measure</strong> the costs incurred, then <strong>assign</strong> them to products.</p>
+            <ul>
+              <li><strong>Job-order costing:</strong> costs traced to a specific job, order or contract (this session).</li>
+              <li><strong>Process costing:</strong> costs accumulated by department and averaged over homogeneous output (Session 6).</li>
+              <li><strong>Activity-based costing:</strong> overhead assigned through many activity pools and drivers (Session 7).</li>
+            </ul>
+            <p>All three assign the <strong>same three cost elements</strong> (DM, DL, OH); they differ only in <em>how</em> the costs are traced and assigned.</p>
+            <div class="tbl-wrap"><table class="tbl">
+              <tr><th>Dimension</th><th>Job-order</th><th>Process</th></tr>
+              <tr><td>Cost unit</td><td>Job, order, contract</td><td>Physical unit</td></tr>
+              <tr><td>Costs accumulated</td><td>By job</td><td>By department</td></tr>
+              <tr><td>Subsidiary record</td><td>Job cost sheet</td><td>Cost-of-production report</td></tr>
+              <tr><td>Typical users</td><td>Custom manufacturers, construction, printing, law/audit/consulting</td><td>Refining, chemicals, textiles, food &amp; beverage, cement</td></tr>
+              <tr><td>Permits computing</td><td>Unit cost and profit/loss <strong>per job</strong></td><td>Unit cost of goods completed and WIP</td></tr>
+            </table></div>
+            <p>Job-order costing also works for <strong>services</strong>: the “job” is a client engagement, case file or repair order; professional hours are DL, filing fees/parts are DM, and office rent/admin/IT are overhead applied with a predetermined rate.</p>
+
+            <h3>The job cost sheet</h3>
+            <p>Records the DM, DL and <strong>applied</strong> OH for one job. The file of job cost sheets for <strong>unfinished</strong> jobs is the <strong>subsidiary ledger for Work-in-Process</strong>; completed sheets move to a completed-jobs file supporting <strong>Finished Goods</strong>.</p>
+            <ul>
+              <li><strong>Materials requisition form</strong> → direct materials issued to the job.</li>
+              <li><strong>Time ticket</strong> → hours a worker spent on the job and the wage rate.</li>
+              <li><strong>Predetermined overhead rate</strong> → overhead applied using the job's actual activity.</li>
+            </ul>
+            <p><strong>Chiphard Works, Job 123:</strong> DM 1,200 + 650 + 350 = ₱2,200; DL (180 × 6.50) + (140 × 7.25) = ₱2,185; OH 320 hrs × ₱4.50 = ₱1,440; total ₱5,825. Price at 40% markup on cost = 5,825 × 1.40 = <strong>₱8,155</strong>.</p>
+
+            <h3>Predetermined overhead rate (POHR)</h3>
+            <div class="formula">POHR       = Budgeted annual overhead ÷ Budgeted annual activity
+Applied OH = POHR × ACTUAL activity used by the job</div>
+            <p>Overhead can't be traced like DM/DL: much of it is incurred for the whole factory and period, and actual totals aren't known until period-end. A <strong>budgeted</strong> rate lets you cost and price a job <strong>during</strong> the period: Session 1's timeliness-over-precision trade-off.</p>
+            <p>Activity base options: direct labor hours (labor-intensive), machine hours (automated), direct labor cost (when wage rates vary). Pick the base most correlated with what <strong>drives</strong> overhead. For a highly automated line, use <strong>machine hours</strong>.</p>
+            <p><strong>Quezon Print Solutions:</strong> 2,700,000 ÷ 45,000 DLH = ₱60/DLH. Job #302 = 62,000 + (180 × 90 = 16,200) + (180 × 60 = 10,800) = <strong>₱89,000</strong>.</p>
+            <p><strong>Normal costing</strong> (standard practice): DM and DL at actual, OH applied with the predetermined rate. <strong>Actual costing</strong> uses actual OH, so it's only known at period-end and too slow for pricing.</p>
+
+            <h3>Under- and overapplied overhead</h3>
+            <div class="formula">Underapplied: Applied OH &lt; Actual OH  (jobs were undercharged)
+Overapplied : Applied OH &gt; Actual OH  (jobs were overcharged)</div>
+            <ul>
+              <li><strong>Immaterial →</strong> close entirely to COGS. Underapplied: Dr COGS / Cr Factory OH (COGS goes <strong>up</strong>). Overapplied: Dr Factory OH / Cr COGS (COGS goes <strong>down</strong>).</li>
+              <li><strong>Material →</strong> prorate across WIP, FG and COGS in proportion to the <strong>applied overhead</strong> in each account's ending balance.</li>
+            </ul>
+            <p><strong>Company X:</strong> ₱2/MH × 96,000 MH = 192,000 applied vs 198,000 actual → <strong>₱6,000 underapplied</strong>. <strong>Company Y:</strong> 150% × 176,000 = 264,000 applied vs 256,000 actual → <strong>₱8,000 overapplied</strong>.</p>
+            <p><strong>Cavite Precision Parts proration</strong> (₱60,000 overapplied): WIP 20% → ↓12,000; FG 30% → ↓18,000; COGS 50% → ↓30,000. If it were underapplied, all three would be increases.</p>
+            <p><strong>Pampanga Metal Works:</strong> POHR 4,500,000 ÷ 30,000 = ₱150. Applied = 29,500 × 150 = 4,425,000 vs actual 4,650,000 → <strong>₱225,000 underapplied</strong>, COGS increased.</p>
+
+            <h3>Departmental vs plantwide rates</h3>
+            <p>A single plantwide rate blends labor-driven and machine-driven departments into one average. Departmental rates use each department's own base. <strong>Example:</strong> Dept A 72,000 ÷ 64,000 DL cost = 112.5% of DL cost; Dept B 75,000 ÷ 10,000 MH = ₱7.50/MH. Job 105 (30 units) = ₱289.00 under departmental rates (₱9.63/unit) vs ₱245.80 under a 180%-of-DL-cost plantwide rate. The plantwide rate <strong>undercosts</strong> this machine-heavy job by ₱43.20, previewing ABC.</p>
+
+            <h3>The cost flow</h3>
+            <div class="formula">Raw Materials → Work in Process → Finished Goods → Cost of Goods Sold
+                 (DM + DL + applied OH)   (completed)      (only when SOLD)</div>
+            <div class="tbl-wrap"><table class="tbl">
+              <tr><th>Transaction</th><th>Debit</th><th>Credit</th></tr>
+              <tr><td>Purchase raw materials</td><td>Raw Materials</td><td>Accounts Payable</td></tr>
+              <tr><td>Issue DM to a job</td><td>WIP</td><td>Raw Materials</td></tr>
+              <tr><td>Direct labor on a job</td><td>WIP</td><td>Wages Payable</td></tr>
+              <tr><td>Apply overhead</td><td>WIP</td><td>Factory OH Applied</td></tr>
+              <tr><td>Job completed</td><td>Finished Goods</td><td>WIP</td></tr>
+              <tr><td>Job sold</td><td>COGS</td><td>Finished Goods</td></tr>
+            </table></div>
+            <p><strong>Bulacan Custom Cabinetry:</strong> COGM = completed jobs (81,000 + 64,000) = ₱145,000; ending WIP = Job 103 = ₱26,600; COGS = beg FG 20,000 + Job 101's 81,000 = ₱101,000; ending FG = 20,000 + 145,000 − 101,000 = ₱64,000.</p>
+            <p><strong>Professional services (Allenby Baldridge Perkins):</strong> DL = 40 × 8,000 + 120 × 2,500 = ₱620,000; filing fees ₱15,000; OH 60% × 620,000 = ₱372,000; total <strong>₱1,007,000</strong>.</p>
+            <p><strong>Job profitability after the fact (Marikina Shoe):</strong> quoted ₱150,000; actual cost 58,000 + 42,000 + 22,000 = ₱122,000; profit ₱28,000 (18.7% vs 25% planned), driven by an ₱8,000 materials overrun. Use it to fix the next quote.</p>
+
+            <h3>EVPI (side topic in the deck)</h3>
+            <div class="formula">EVPI = EPPI − EMV
+EPPI = expected payoff if you always knew the true state in advance
+EMV  = expected value of your best choice under current uncertainty</div>
+            <p>Information only has value if it could change your decision. EVPI is the ceiling on what perfect information is worth; real (imperfect) research is worth less, so paying more than EVPI is irrational.</p>
+          </div>
+        </div>
+
+        <div class="session-card">
+          <button class="session-header" onclick="toggleSession(this)" aria-expanded="false"><h2>Session 6 — Process Costing</h2><span class="tag">＋</span></button>
+          <div class="session-body">
+            <h3>The big picture</h3>
+            <p>Process costing accumulates costs <strong>by department</strong> and divides by output, so every unit gets an <strong>average</strong> cost. It fits continuous, homogeneous, high-volume output: refining, chemicals, textiles, food and beverage, cement. Gallon #4,001 is indistinguishable from #4,002, so there is nothing unique to trace.</p>
+            <p>Only <strong>two cost categories</strong>: direct materials and <strong>conversion costs</strong> (DL + OH combined, since they're incurred together and evenly). Job-order costing keeps all three separate.</p>
+            <p><strong>Hybrid / operation costing:</strong> a shoe maker can use process costing for standard cutting/stitching and job-order costing for a custom limited batch. The choice depends on whether the <strong>output</strong> is unique or homogeneous, department by department.</p>
+
+            <h3>The five-step framework</h3>
+            <ol>
+              <li><strong>Physical units:</strong> Beginning WIP + Units started = Units completed + Ending WIP.</li>
+              <li><strong>Equivalent units</strong> (separately for materials and conversion).</li>
+              <li><strong>Total costs</strong> to account for, by category.</li>
+              <li><strong>Unit cost</strong> = total cost ÷ equivalent units, per category, then summed.</li>
+              <li><strong>Assign costs</strong> to units transferred out and to ending WIP, and <strong>reconcile</strong> to Step 3.</li>
+            </ol>
+            <p>All five steps appear on the <strong>cost-of-production report</strong>: one report <strong>per department, per period</strong> (vs one job cost sheet per job). The physical flow equation also helps detect lost units (spoilage, shrinkage).</p>
+
+            <h3>Equivalent units (EU)</h3>
+            <p>EU = how many <strong>whole</strong> units the completed plus partially completed units represent. 100 units 60% complete = 60 EU.</p>
+            <ul>
+              <li><strong>Materials at the start:</strong> any unit in process is 100% complete for materials.</li>
+              <li><strong>Evenly throughout:</strong> same % as conversion.</li>
+              <li><strong>At the end:</strong> ending WIP is 0% complete for materials (so materials EU can be lower than conversion EU).</li>
+              <li>Units completed and transferred out are always <strong>100%</strong> complete for every category.</li>
+            </ul>
+            <p><strong>Common trap:</strong> applying the same % to materials and conversion. Always ask, separately, “when is this cost added?”</p>
+
+            <h3>No beginning inventory (Cavite Chemical, May)</h3>
+            <div class="tbl-wrap"><table class="tbl">
+              <tr><th></th><th>Physical</th><th>Materials EU</th><th>Conversion EU</th></tr>
+              <tr><td>Completed &amp; transferred</td><td class="num">8,000</td><td class="num">8,000</td><td class="num">8,000</td></tr>
+              <tr><td>Ending WIP (100% / 20%)</td><td class="num">10,000</td><td class="num">10,000</td><td class="num">2,000</td></tr>
+              <tr><td><strong>Total</strong></td><td class="num">18,000</td><td class="num">18,000</td><td class="num">10,000</td></tr>
+            </table></div>
+            <p>Unit costs: materials 27,000 ÷ 18,000 = ₱1.50; conversion 25,000 ÷ 10,000 = ₱2.50; total ₱4.00. Transferred out 8,000 × 4 = ₱32,000. Ending WIP = 10,000 × 1.50 + 2,000 × 2.50 = ₱20,000. Check: 32,000 + 20,000 = ₱52,000 ✓.</p>
+
+            <h3>Weighted-average method</h3>
+            <div class="formula">WA EU     = Units completed + (Ending WIP × % complete)
+Unit cost = (Beginning WIP cost + Current cost) ÷ WA EU</div>
+            <p>Blends last period's cost in beginning WIP with this period's cost into <strong>one average</strong>. Beginning WIP's % never enters the formula. Simpler and most common in practice; best when costs are stable. Weakness: an efficiency gain or loss this period gets diluted by last period's costs.</p>
+            <p><strong>Nueva Ecija Rice Mill:</strong> EU materials 16,000 + 4,000 = 20,000; conversion 16,000 + 1,000 = 17,000. Materials (18,000 + 162,000) ÷ 20,000 = ₱9; conversion (9,600 + 143,400) ÷ 17,000 = ₱9. Transferred out 16,000 × 18 = <strong>₱288,000</strong>; ending WIP ₱45,000; total ₱333,000 ✓.</p>
+
+            <h3>FIFO method</h3>
+            <div class="formula">FIFO EU   = WA EU − (Beginning WIP × % already done last period)
+          = Units completed + (Ending WIP × %) − (Beginning WIP × % done)
+Unit cost = CURRENT-period cost only ÷ FIFO EU</div>
+            <p>Keeps beginning WIP cost <strong>separate</strong>, assuming it is finished and transferred out <strong>first</strong>. FIFO EU are never larger than WA EU. Better for <strong>cost control</strong> because it isolates this period's performance. Use when input prices are volatile (Iloilo Sugar Refinery's price spike → FIFO).</p>
+            <p><strong>Department A:</strong> WA EU 6,500 / 6,100 → FIFO 6,500 − 1,500 = 5,000 materials; 6,100 − 1,000 = 5,100 conversion. <strong>Aklan Fish Cannery</strong> (materials at end, beg WIP 0% materials): FIFO materials EU = WA = 9,000; conversion 9,800 − 700 = 9,100.</p>
+            <p><strong>FIFO cost transferred out</strong> = Beginning WIP cost + Cost to complete beginning WIP (its remaining %) + Units started and completed × full current unit cost.</p>
+            <div class="tbl-wrap"><table class="tbl">
+              <tr><th>Portland Cement</th><th>Weighted-average</th><th>FIFO</th></tr>
+              <tr><td>EU materials / conversion</td><td class="num">45,000 / 41,500</td><td class="num">44,200 / 41,020</td></tr>
+              <tr><td>Unit cost materials</td><td class="num">₱1.1889</td><td class="num">₱0.9389</td></tr>
+              <tr><td>Unit cost conversion</td><td class="num">₱13.9156</td><td class="num">₱12.7133</td></tr>
+              <tr><td>Cost of goods completed</td><td class="num">₱604,184</td><td class="num">₱607,235</td></tr>
+              <tr><td>Ending WIP</td><td class="num">₱26,818</td><td class="num">₱23,765</td></tr>
+            </table></div>
+
+            <h3>Multiple departments and transferred-in cost</h3>
+            <p>Each department prepares its own report. Cost completed in an earlier department becomes <strong>transferred-in cost</strong> in the next, treated like material added at the <strong>start</strong> of the receiving department, so it is always 100% complete. A department can have three EU columns: transferred-in, materials, conversion.</p>
+            <p><strong>Batangas Chemicals Dept 2:</strong> EU transferred-in 10,000; materials (added at end) 8,000; conversion 8,000 + 1,200 = 9,200. Unit costs ₱15 + ₱8 + ₱12 = ₱35 → transferred to FG 8,000 × 35 = <strong>₱280,000</strong>; ending WIP ₱44,400.</p>
+            <div class="formula">Transfer to next department:  Dr WIP – Packaging   Cr WIP – Milling
+Last department completes:    Dr Finished Goods    Cr WIP – (last dept)</div>
+
+            <h3>When the report doesn't reconcile</h3>
+            <p>Work backward in this order: re-check Step 1's physical balance (cheapest), then Step 2's equivalent units (wrong % is the most likely cause), then Step 4's division.</p>
+          </div>
+        </div>
+
+        <div class="session-card">
+          <button class="session-header" onclick="toggleSession(this)" aria-expanded="false"><h2>Session 7 — Activity-Based Costing: Mechanics</h2><span class="tag">＋</span></button>
+          <div class="session-body">
+            <h3>Why traditional costing breaks down</h3>
+            <p>Traditional systems apply overhead with <strong>one</strong> volume-based rate (DLH or MH), assuming every product consumes overhead in proportion to that measure. Automation shrank direct labor and grew overhead, so that assumption no longer reflects cause and effect.</p>
+            <p><strong>Cost distortion:</strong> systematic overcosting of some products and undercosting of others.</p>
+            <ul>
+              <li><strong>High-volume, simple</strong> products → typically <strong>overcosted</strong>.</li>
+              <li><strong>Low-volume, complex</strong> products (many setups, inspections, special handling) → typically <strong>undercosted</strong>.</li>
+              <li>This is <strong>cross-subsidization</strong>: the simple product subsidizes the complex one.</li>
+            </ul>
+            <p>Warning signs: competitors keep underpricing your simplest high-volume product, while your premium custom product barely breaks even despite a big markup.</p>
+
+            <h3>What ABC is</h3>
+            <p>ABC assigns overhead based on a product's <strong>use of activities</strong>, not volume alone. It is <strong>not</strong> an alternative to job-order or process costing; it is a more refined way to assign overhead within either. The key difference is the <strong>number of cost drivers</strong>. Stage 1 (traditional): costs to departments; Stage 1 (ABC): costs to activities; Stage 2 (both): to products.</p>
+            <ol>
+              <li><strong>Identify activities</strong> and their cost drivers.</li>
+              <li><strong>Compute an activity rate</strong> for each pool.</li>
+              <li><strong>Sum</strong> the activity costs each product consumes.</li>
+            </ol>
+            <div class="formula">Activity rate     = Budgeted activity-pool cost ÷ Predicted driver level
+Overhead assigned = Σ (Activity rate × Driver units the product used)</div>
+            <p>Building pools (regrouping overhead accounts by activity via interviews, time studies, logs) is the hard part; the arithmetic is easy. A driver must be chosen because it <strong>causes</strong> the cost, not because its data is convenient.</p>
+
+            <h3>Global Metals, Job 107 (2,000 tools)</h3>
+            <div class="tbl-wrap"><table class="tbl">
+              <tr><th>Pool</th><th>Rate</th><th>Job 107 used</th><th>Cost</th></tr>
+              <tr><td>Setups (₱100,000 / 100)</td><td class="num">₱1,000/setup</td><td class="num">2</td><td class="num">₱2,000</td></tr>
+              <tr><td>Material handling (₱100,000 / 50,000 lb)</td><td class="num">₱2.00/lb</td><td class="num">10,000 lb</td><td class="num">₱20,000</td></tr>
+              <tr><td>Waste control (₱50,000 / 10,000 lb)</td><td class="num">₱5.00/lb</td><td class="num">2,000 lb</td><td class="num">₱10,000</td></tr>
+              <tr><td>Inspection (₱75,000 / 1,000)</td><td class="num">₱75/insp.</td><td class="num">10</td><td class="num">₱750</td></tr>
+              <tr><td>Other (₱200,000 / 20,000 MH)</td><td class="num">₱10/MH</td><td class="num">500 MH</td><td class="num">₱5,000</td></tr>
+              <tr><td colspan="3"><strong>Total ABC overhead</strong> (₱18.88/tool)</td><td class="num"><strong>₱37,750</strong></td></tr>
+            </table></div>
+            <p>Plantwide rate = 525,000 ÷ 20,000 MH = ₱26.25 → Job 107 gets only 500 × 26.25 = ₱13,125 (₱6.56/tool). The MH rate is blind to the job's setups, waste and inspections, so it badly <strong>undercosts</strong> the job.</p>
+
+            <h3>Laguna Plastics: cross-subsidization quantified</h3>
+            <p>Plantwide 1,800,000 ÷ 60,000 MH = ₱30/MH → Basic Bins ₱27.00, Custom Containers ₱45.00 per unit. ABC (machining ₱20/MH, setups ₱400/setup) → Basic Bins (900,000 + 120,000) ÷ 50,000 = <strong>₱20.40</strong>; Custom Containers (300,000 + 480,000) ÷ 10,000 = <strong>₱78.00</strong>. Basic Bins overcosted by ₱6.60; Custom Containers undercosted by ₱33.00.</p>
+            <p>With three products (Pangasinan Furniture) distortion is a <strong>spectrum</strong>: the high-volume Chair is overcosted, the middle Table is nearly accurate, the complex Cabinet is undercosted most.</p>
+
+            <h3>The cost hierarchy</h3>
+            <ul>
+              <li><strong>Unit-level:</strong> every unit (machining one part). Volume drivers work fine here.</li>
+              <li><strong>Batch-level:</strong> once per batch, any size (setup).</li>
+              <li><strong>Product-level:</strong> supports a product line (engineering changes, formulas, regulatory filings).</li>
+              <li><strong>Facility-level:</strong> keeps the plant running (factory rent, top management). Often left <strong>unallocated</strong>.</li>
+            </ul>
+            <p>Match each pool to a driver from the <strong>same level</strong>. Forcing batch/product costs onto a volume driver is the traditional-costing mistake.</p>
+
+            <h3>Services and customers</h3>
+            <p>Same three steps. <strong>Cavite Medical Diagnostic Center:</strong> rates scheduling ₱20/visit, lab ₱30/procedure, consultation ₱60/hour → Basic Panel ₱56, Imaging ₱80, Executive Package ₱110 per visit. Drivers elsewhere: bed-days (hospitals), takeoffs/landings (airlines), rooms occupied (hotels), teller transactions and loan applications (banks).</p>
+            <p><strong>Rizal Wholesale customers:</strong> ₱100/order, ₱200/delivery → A ₱80,000 profit, B <strong>(₱140,000)</strong>, C ₱20,000. B's many small orders and deliveries eat more than its gross margin.</p>
+
+            <h3>Benefits, limits and the adoption decision</h3>
+            <ul>
+              <li><strong>Benefits:</strong> more accurate costs; reveals the cost of complexity and small batches; better pricing, mix and bidding; highlights non-value-added activity (bridge to ABM).</li>
+              <li><strong>Limits:</strong> costly to design and maintain; heavy data collection; activity rates are still estimates; may not pay off in simple, labor-intensive, low-overhead firms.</li>
+              <li><strong>Adopt when:</strong> overhead is large relative to direct cost, products are diverse in volume/complexity/batch size, activities beyond volume are significant, and decisions have real stakes.</li>
+            </ul>
+            <p>Single-product bottled-water plant → stay traditional. Custom electronics with 40+ variants → adopt ABC. One product with constant batch sizes (Iloilo Precision Tools) → ABC ≈ plantwide rate. Many firms pilot ABC on one line, or use 4–6 well-chosen pools.</p>
+          </div>
+        </div>
+
+        <div class="session-card">
+          <button class="session-header" onclick="toggleSession(this)" aria-expanded="false"><h2>Session 8 — Activity-Based Management &amp; Cost Driver Analytics</h2><span class="tag">＋</span></button>
+          <div class="session-body">
+            <h3>From ABC to ABM</h3>
+            <p><strong>ABM</strong> uses activity-based cost information to improve operations: eliminate non-value-added activities, redesign processes, and understand true product, customer and supplier profitability.</p>
+            <div class="tbl-wrap"><table class="tbl">
+              <tr><th>ABC</th><th>ABM</th></tr>
+              <tr><td>A costing technique</td><td>A management philosophy</td></tr>
+              <tr><td>“What does this cost?”</td><td>“Should we still do this, and how could we do it better?”</td></tr>
+              <tr><td>Backward-looking: measures</td><td>Forward-looking: changes what happens next</td></tr>
+              <tr><td>Diagnosis</td><td>Treatment</td></tr>
+            </table></div>
+            <p>Accurate costs alone change nothing until management acts. ABM is cyclical, like <strong>Kaizen</strong> (continuous improvement): measure → identify waste → diagnose cause → act → re-measure. It's cross-functional: operations, sales, procurement.</p>
+
+            <h3>Process-value analysis (PVA)</h3>
+            <p>Classify every activity as value-added or non-value-added from the <strong>customer's</strong> view. Test: would the customer pay for it if they could see it?</p>
+            <ul>
+              <li><strong>Value-added:</strong> transforms the product (cutting, machining, assembly, sanding/finishing, painting).</li>
+              <li><strong>Non-value-added:</strong> scheduling, moving, waiting, inspecting, storing.</li>
+              <li><strong>Necessary ≠ value-added.</strong> Inspection is often necessary but still non-value-added; a perfect product needs none. Prevention reduces the need for appraisal and failure.</li>
+              <li>Quality costs: prevention mostly value-added; internal/external failure entirely non-value-added; appraisal sits in between.</li>
+            </ul>
+            <p>Responses to non-value-added activities: <strong>Eliminate</strong>, <strong>Reduce</strong>, <strong>Select</strong> (cheapest way to do a necessary one), <strong>Share</strong> (spread over more output). Non-value-added time often eats <strong>60–90%</strong> of cycle time in traditional plants.</p>
+            <p><strong>JIT:</strong> demand-pull production; inventory is a symptom of hidden problems. <strong>Manufacturing cells</strong> group machines by <strong>product family</strong>, cutting moving and waiting; workers become multifunction labor.</p>
+
+            <h3>Driver analysis and root cause</h3>
+            <p>Asks <strong>why</strong> an activity happens and this often, not just how much it costs. Custom Bracket's 800 setups/year are a symptom; root causes could be small batches (set minimum order quantities), slow changeovers (SMED setup reduction) or poor scheduling. Each cause implies a different fix.</p>
+            <ul>
+              <li><strong>5 Whys</strong> (Toyota): ask “why?” repeatedly. The setup-cost chain ends at a <strong>sales policy</strong> (no minimum order), far from the factory floor.</li>
+              <li><strong>Fishbone diagram</strong> (Kaoru Ishikawa, 1960s): six cause categories — processes, equipment, materials, people, environment, management.</li>
+              <li><strong>Kepner-Tregoe</strong>: situation appraisal (what's going on?), problem analysis (why?), decision analysis (what should we do?), potential problem/opportunity analysis (what lies ahead?).</li>
+              <li><strong>Data analytics:</strong> regress cost on candidate drivers, but watch for <strong>multicollinearity</strong> (Session 3) when candidate causes are correlated with each other.</li>
+            </ul>
+
+            <h3>Customer profitability</h3>
+            <p>Gross margin ignores selling and service cost. Assign order-processing and delivery costs with ABC. Rizal Wholesale: ranked by GM A &gt; B &gt; C; by operating profit A &gt; C &gt; B (B loses ₱140,000).</p>
+            <p>Responses: renegotiate terms (minimum orders, consolidated deliveries), activity-based pricing, work with the customer to change behavior, and only as a last resort drop them (strategic value matters). If B consolidates to 250 orders and 300 deliveries: cost 25,000 + 60,000 = ₱85,000 → profit <strong>₱55,000</strong>.</p>
+            <p><strong>Whale curve:</strong> a few customers generate more than 100% of profit while a long tail loses money. Use it to tier customers (protect, monitor, renegotiate).</p>
+
+            <h3>Supplier costing: total cost of ownership (TCO)</h3>
+            <div class="formula">TCO = Purchase price + hidden activity costs
+      (receiving, inspection, rework, expediting, administrative)</div>
+            <p>Supplier A at ₱95 vs B at ₱100: A's hidden costs of ₱31,000 per 1,000 units vs B's ₱5,000 make A's TCO ₱126/unit vs B's <strong>₱105</strong>. Choose on TCO, not price. <strong>Zamboanga Seafood:</strong> defects up from 1% to 4% raised TCO from ₱3.9M to ₱4.88M (+₱980,000) with no change in price. JIT purchasing makes supplier quality critical because there's no buffer stock.</p>
+
+            <h3>Activity performance measures</h3>
+            <div class="formula">Cycle time = Processing + Inspection + Moving + Waiting
+MCE        = Value-added (processing) time ÷ Cycle time
+Velocity   = Units produced ÷ Cycle time</div>
+            <p><strong>Marikina Shoe:</strong> 3.5 + 1.0 + 4.5 + 1.0 = 10 hrs → MCE 35%. Cells cut waiting to 1.5 hrs → cycle 7 hrs → MCE <strong>50%</strong>. <strong>100-unit order:</strong> 10 days → 4 days: MCE 20% → 50%, velocity 10 → 25 units/day. Cycle time is the denominator of both, so removing waste raises both. Traditional plants often run MCE below 50%; world-class JIT reaches 80–90%. MCE is a Balanced Scorecard internal-process measure.</p>
+          </div>
+        </div>
+
+        <div class="session-card">
+          <button class="session-header" onclick="toggleSession(this)" aria-expanded="false"><h2>Formula Sheet — Sessions 5 to 8</h2><span class="tag">＋</span></button>
+          <div class="session-body">
+            <h3>Job-order costing</h3>
+            <div class="formula">POHR                 = Budgeted OH ÷ Budgeted activity
+Applied OH           = POHR × Actual activity
+Job cost             = DM + DL + Applied OH
+Price (markup)       = Cost × (1 + markup %)
+Under/(over)applied  = Actual OH − Applied OH   (+ = under, − = over)
+Proration share      = Account's applied OH ÷ Total applied OH
+Ending FG            = Beg FG + COGM − COGS</div>
+            <h3>Process costing</h3>
+            <div class="formula">Physical flow        : Beg WIP + Started = Completed + End WIP
+WA EU                = Completed + (End WIP × %)
+FIFO EU              = WA EU − (Beg WIP × % done last period)
+WA unit cost         = (Beg WIP cost + Current cost) ÷ WA EU
+FIFO unit cost       = Current cost ÷ FIFO EU
+Transferred out (WA) = Completed × total unit cost
+End WIP              = Σ (EU in End WIP × that category's unit cost)
+Check                : Transferred out + End WIP = Total costs to account for</div>
+            <h3>ABC and ABM</h3>
+            <div class="formula">Activity rate        = Pool cost ÷ Driver level
+Product OH           = Σ (Rate × Driver units consumed)
+Customer op. profit  = Gross margin − ABC-assigned service cost
+TCO                  = Price + receiving + inspection + rework + expediting + admin
+MCE                  = Processing time ÷ Cycle time
+Velocity             = Units ÷ Cycle time</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-panel">
+      <div class="section-title" id="view-title">All Sessions</div>
+      <div class="section-sub" id="view-sub"></div>
+      <div class="note">
+        <strong>Scoring:</strong> 1 point per correct answer. Wrong answers don't deduct anything, so answer every item.
+        Items cover Sessions 5 to 8, mixing theory with short computations in the style of Quiz 1. Keep a calculator handy, and use the session tabs to drill one topic at a time.
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="ex-prog"></div></div>
+      <div id="ex-wrap"></div>
+      <div class="quiz-controls">
+        <div class="score-badge">Score: <span id="ex-score-txt">0 / 0</span></div>
+        <div class="btns">
+          <button class="btn outline" onclick="retryMissed()">Retry missed items</button>
+          <button class="btn outline" onclick="resetExam()">↺ Reset all</button>
+        </div>
+      </div>
+      <div class="result-box" id="ex-result">
+        <div class="big" id="ex-big"></div>
+        <div class="breakdown" id="ex-breakdown"></div>
+        <div class="chapter-scores" id="ex-chapters"></div>
+        <div class="msg" id="ex-msg"></div>
+        <button class="btn" onclick="retryMissed()">Retry missed items</button>
+      </div>
+      </div>
+    </main>
+    <script>
+const S5 = "Session 5 — Job-Order Costing";
+const S6 = "Session 6 — Process Costing";
+const S7 = "Session 7 — Activity-Based Costing";
+const S8 = "Session 8 — Activity-Based Management";
+const Q = [
+ { ch: S5, q: "Which business is best suited to job-order costing?", o: ["A cement plant running a continuous process","An oil refinery operating 24/7","A shipyard building fishing vessels to each buyer's specification","A soft-drink plant bottling millions of identical bottles"], a: 2, fb: "Each vessel is a unique, identifiable job. The other three produce continuous, homogeneous output, which calls for process costing." },
+ { ch: S5, q: "In a job-order system, the file of job cost sheets for UNFINISHED jobs serves as the subsidiary ledger for:", o: ["Work-in-Process Inventory","Finished Goods Inventory","Raw Materials Inventory","Cost of Goods Sold"], a: 0, fb: "Unfinished job cost sheets support Work-in-Process. When a job is completed, its sheet moves to the completed-jobs file supporting Finished Goods." },
+ { ch: S5, q: "Which three items feed the numbers on a job cost sheet?", o: ["Materials requisition form, time ticket, predetermined overhead rate","Purchase order, sales invoice, receiving report","Bank statement, payroll register, general ledger","Cost-of-production report, bill of lading, time ticket"], a: 0, fb: "Materials requisitions give DM, time tickets give DL, and the POHR applied to the job's actual activity gives overhead." },
+ { ch: S5, q: "Budgeted overhead is ₱1,800,000 and budgeted direct labor hours are 24,000. Job #88 uses ₱40,000 of direct materials and 120 DLH at ₱100 per hour. What is the total cost of Job #88?", o: ["₱64,000","₱49,000","₱61,000","₱52,000"], a: 2, fb: "POHR = 1,800,000 ÷ 24,000 = ₱75/DLH. Job = 40,000 + (120 × 100 = 12,000) + (120 × 75 = 9,000) = ₱61,000." },
+ { ch: S5, q: "Why is the predetermined overhead rate based on BUDGETED rather than actual figures?", o: ["PFRS requires budgeted figures for inventory","So jobs can be costed and priced during the period, without waiting for year-end actual overhead","Actual overhead can never be measured","Budgeted figures are always more accurate"], a: 1, fb: "It's the timeliness-over-precision trade-off from Session 1: you can quote a price on Monday for a job starting Tuesday." },
+ { ch: S5, q: "A company applies overhead at ₱40 per machine hour. Actual results: 52,000 machine hours and ₱2,000,000 of actual overhead. Overhead for the year is:", o: ["Overapplied by ₱80,000","Underapplied by ₱20,000","Underapplied by ₱80,000","Overapplied by ₱2,080,000"], a: 0, fb: "Applied = 52,000 × 40 = ₱2,080,000. Applied exceeds actual (₱2,000,000) by ₱80,000, so overhead is overapplied." },
+ { ch: S5, q: "Overhead is overapplied by an IMMATERIAL amount. The closing entry is:", o: ["Debit Cost of Goods Sold; credit Factory Overhead","Debit Finished Goods; credit Cost of Goods Sold","Debit Factory Overhead; credit Cost of Goods Sold","Debit Work-in-Process; credit Factory Overhead"], a: 2, fb: "Too much overhead was charged to jobs, so the excess is removed: Dr Factory Overhead, Cr COGS, which DECREASES COGS." },
+ { ch: S5, q: "Overhead is underapplied by a material ₱50,000. Applied overhead in ending balances: WIP ₱100,000, FG ₱150,000, COGS ₱250,000. The adjustment to Finished Goods is:", o: ["Increase of ₱50,000","Increase of ₱15,000","Increase of ₱25,000","Decrease of ₱15,000"], a: 1, fb: "FG holds 150,000 ÷ 500,000 = 30% of applied overhead → 30% × 50,000 = ₱15,000. Underapplied means the accounts carry too little overhead, so it's an increase." },
+ { ch: S5, q: "A single plantwide overhead rate is most likely to distort job costs when:", o: ["The company has only one department","Overhead is small relative to direct materials","Departments differ in what drives their overhead (labor-driven vs machine-driven)","All jobs use the departments in the same proportions"], a: 2, fb: "The plantwide rate blends a labor-driven and a machine-driven department into one average. Job 105 cost ₱289.00 with departmental rates but only ₱245.80 with the plantwide rate." },
+ { ch: S5, q: "Beginning Finished Goods ₱30,000; Cost of Goods Manufactured ₱210,000; Cost of Goods Sold ₱195,000. Ending Finished Goods is:", o: ["₱15,000","₱45,000","₱240,000","₱225,000"], a: 1, fb: "Ending FG = Beg FG + COGM − COGS = 30,000 + 210,000 − 195,000 = ₱45,000." },
+ { ch: S5, q: "Normal costing means:", o: ["DM, DL and overhead are all recorded at actual cost","Overhead is expensed as a period cost","DM and DL at actual cost; overhead applied using a predetermined rate","All three elements at standard cost"], a: 2, fb: "Normal costing traces DM and DL at actual and applies overhead with the POHR. Actual costing waits for actual overhead, which is too slow for pricing." },
+ { ch: S5, q: "A new production line is almost fully automated; its overhead is mainly power, maintenance and depreciation. The best overhead application base is:", o: ["Direct labor hours","Direct labor cost","Number of employees","Machine hours"], a: 3, fb: "The base should track what drives the cost. On an automated line, overhead follows machine usage, not the small amount of labor." },
+ { ch: S6, q: "Process costing groups manufacturing costs into which two categories?", o: ["Prime costs and period costs","Direct materials and conversion costs","Fixed and variable costs","Direct labor and factory overhead"], a: 1, fb: "Conversion cost = DL + OH combined, because in a continuous process they're incurred together and evenly." },
+ { ch: S6, q: "Beginning WIP 2,500 units; units started 20,000; ending WIP 3,500 units. Units completed and transferred out:", o: ["19,000","26,000","22,500","16,500"], a: 0, fb: "Beg + Started = Completed + Ending → 2,500 + 20,000 = Completed + 3,500 → Completed = 19,000." },
+ { ch: S6, q: "No beginning WIP. 12,000 units completed; 5,000 units in ending WIP, 40% converted. Materials are added at the START. Equivalent units for materials and conversion:", o: ["17,000 and 14,000","12,000 and 14,000","17,000 and 17,000","14,000 and 14,000"], a: 0, fb: "Materials: 12,000 + 5,000 × 100% = 17,000. Conversion: 12,000 + 5,000 × 40% = 14,000." },
+ { ch: S6, q: "Materials are added at the END of the process. 9,000 units completed; ending WIP 2,000 units, 70% converted. Equivalent units for materials and conversion:", o: ["11,000 and 10,400","9,000 and 9,000","9,000 and 10,400","10,400 and 10,400"], a: 2, fb: "Ending WIP hasn't reached the end, so it has 0% materials: 9,000 + 0 = 9,000. Conversion: 9,000 + 2,000 × 70% = 10,400." },
+ { ch: S6, q: "Which statement about the weighted-average method is correct?", o: ["Beginning WIP's percentage of completion is subtracted when computing equivalent units","It blends beginning WIP cost with current cost and never uses beginning WIP's own % in the EU formula","It keeps beginning WIP costs separate from current costs","It always gives fewer equivalent units than FIFO"], a: 1, fb: "WA EU = Units completed + (Ending WIP × %). Beginning WIP needs no separate treatment; FIFO is the method that subtracts it." },
+ { ch: S6, q: "Beginning WIP 1,500 units, 66⅔% converted. Weighted-average conversion EU = 6,100. FIFO conversion EU =", o: ["5,100","6,100","4,600","7,100"], a: 0, fb: "FIFO EU = WA EU − (Beg WIP × % done last period) = 6,100 − (1,500 × 2/3 = 1,000) = 5,100." },
+ { ch: S6, q: "Weighted-average: beginning WIP materials cost ₱12,000; current materials cost ₱48,000; materials EU 24,000. Materials cost per EU:", o: ["₱3.00","₱2.00","₱2.50","₱2.73"], a: 2, fb: "WA unit cost = (Beg + Current) ÷ WA EU = (12,000 + 48,000) ÷ 24,000 = ₱2.50. Using only the current ₱48,000 is the FIFO-style mistake." },
+ { ch: S6, q: "Unit costs: materials ₱3.00, conversion ₱5.00. Ending WIP: 1,000 units, materials added at start, 40% converted. Cost of ending WIP:", o: ["₱6,200","₱3,200","₱8,000","₱5,000"], a: 3, fb: "Each category uses its OWN EU: materials 1,000 × 3 = ₱3,000; conversion 400 × 5 = ₱2,000; total ₱5,000." },
+ { ch: S6, q: "Transferred-in costs in the receiving department are treated as:", o: ["A period cost","Material added at the end of the receiving process","Conversion cost incurred evenly","Material added at the very START of the receiving process, always 100% complete"], a: 3, fb: "Transferred-in units carry the prior department's cost and are 100% complete for that category by definition." },
+ { ch: S6, q: "Input prices spiked mid-quarter. Management wants a clean read on THIS quarter's processing efficiency. Which method fits best?", o: ["FIFO, because it isolates current-period costs from beginning WIP","Job-order costing","Either; the results are always identical","Weighted-average, because it is simpler"], a: 0, fb: "FIFO keeps the pre-spike beginning WIP cost separate, giving a current-period unit cost uncontaminated by older prices (the Iloilo Sugar Refinery case)." },
+ { ch: S6, q: "The Milling Department transfers ₱288,000 of completed units to the Packaging Department. The entry is:", o: ["Dr Cost of Goods Sold; Cr WIP – Milling","Dr Finished Goods; Cr WIP – Milling","Dr WIP – Packaging; Cr WIP – Milling","Dr WIP – Milling; Cr WIP – Packaging"], a: 2, fb: "Cost moves from one department's WIP to the next. Only the final department's transfer is debited to Finished Goods." },
+ { ch: S6, q: "Your cost-of-production report doesn't reconcile (transferred out + ending WIP ≠ total costs). What should you re-check FIRST?", o: ["The journal entries","The selling price","Step 4: the division for unit cost","Step 1: whether the physical-unit flow balances"], a: 3, fb: "Work backward in order of cheapest check: Step 1 physical flow, then Step 2 equivalent units (the most likely culprit), then Step 4 division." },
+ { ch: S7, q: "The principal difference between traditional costing and ABC is:", o: ["ABC ignores direct materials","The number of cost drivers (and cost pools) used to assign overhead","ABC replaces job-order and process costing","ABC uses actual instead of budgeted overhead"], a: 1, fb: "Traditional costing uses one or two volume-based drivers; ABC uses many activity pools, each with its own driver and rate." },
+ { ch: S7, q: "Machine setup cost is budgeted at ₱450,000 for 900 predicted setups. The activity rate is:", o: ["₱450","₱900","₱500","₱2,000"], a: 2, fb: "Activity rate = Budgeted pool cost ÷ Predicted driver level = 450,000 ÷ 900 = ₱500 per setup." },
+ { ch: S7, q: "Rates: handling ₱120/move, setup ₱500/setup, inspection ₱150/inspection, engineering ₱800/change order. Product X (2,000 units) uses 45 moves, 8 setups, 30 inspections, 3 change orders. ABC overhead per unit:", o: ["₱16.30","₱11.70","₱6.45","₱8.15"], a: 3, fb: "5,400 + 4,000 + 4,500 + 2,400 = ₱16,300 ÷ 2,000 units = ₱8.15 per unit." },
+ { ch: S7, q: "Total overhead ₱600,000; 20,000 machine hours. ABC pools: machining ₱400,000 (20,000 MH), setups ₱200,000 (100 setups). Product K: 1,000 units, 2,000 MH, 30 setups. Under the plantwide MH rate, Product K's overhead per unit is:", o: ["Undercosted by ₱60","Correctly costed","Overcosted by ₱40","Undercosted by ₱40"], a: 3, fb: "Plantwide: ₱30/MH × 2,000 = ₱60,000 → ₱60/unit. ABC: 2,000 × ₱20 + 30 × ₱2,000 = ₱100,000 → ₱100/unit. Plantwide undercosts K by ₱40." },
+ { ch: S7, q: "Under a single plantwide machine-hour rate, Laguna Plastics' Basic Bins (high volume, few setups) were:", o: ["Overcosted, subsidizing the low-volume Custom Containers","Undercosted by ₱33 per unit","Correctly costed","Undercosted, because they use few setups"], a: 0, fb: "Basic Bins: ₱27.00 traditional vs ₱20.40 ABC (overcosted ₱6.60). Custom Containers: ₱45.00 vs ₱78.00 (undercosted ₱33)." },
+ { ch: S7, q: "Which is a BATCH-level activity?", o: ["Paying factory rent","Processing engineering changes for a product line","Machining each part","Setting up a machine for a production run"], a: 3, fb: "A setup happens once per batch regardless of batch size. Machining is unit-level, engineering changes are product-level, rent is facility-level." },
+ { ch: S7, q: "How do well-designed ABC systems often treat facility-level costs like factory rent?", o: ["Assign them using number of setups","Treat them as direct materials","Charge them all to the highest-volume product","Leave them unallocated and report them separately"], a: 3, fb: "Facility-level costs can't be meaningfully traced to products, so many ABC systems deliberately leave them unallocated." },
+ { ch: S7, q: "ABC is MOST likely to be worth the investment for:", o: ["Any company with more than 100 employees","A custom electronics assembler with 40+ variants, frequent changeovers and heavy inspection","A labor-intensive firm with low overhead and similar products","A single-product bottled-water plant with one line"], a: 1, fb: "The deciding factors are high overhead and product diversity, not size or industry." },
+ { ch: S7, q: "Material inspection is triggered by the number of incoming shipments. A manager proposes direct labor hours as the driver because that data is already available. You should:", o: ["Accept it, because labor hours are a valid driver for all overhead","Reject it; a driver must have a cause-and-effect link to the cost","Use machine hours instead","Accept it; convenience lowers the system's cost"], a: 1, fb: "A convenient-but-wrong driver reintroduces the distortion ABC exists to remove: ABC in name, traditional costing in substance." },
+ { ch: S7, q: "Order processing ₱100/order; delivery ₱200/delivery. Customer B: gross margin ₱140,000, 1,000 orders, 900 deliveries. Customer B's operating profit:", o: ["(₱140,000)","₱40,000","₱140,000","(₱280,000)"], a: 0, fb: "Assigned cost = 100,000 + 180,000 = ₱280,000. Operating profit = 140,000 − 280,000 = (₱140,000), a loss." },
+ { ch: S7, q: "A plant makes ONE product in one continuous process with nearly constant batch sizes. Compared with a plantwide rate, ABC would likely give:", o: ["No cost at all","A much higher unit cost","A very similar unit cost","A much lower unit cost"], a: 2, fb: "Cross-subsidization needs differences in how products consume activities. With one product, there's nothing to subsidize, so ABC adds cost without accuracy." },
+ { ch: S7, q: "Which statement about ABC is correct?", o: ["It is a third costing system that replaces job-order and process costing","It eliminates the need to estimate overhead","It only applies to manufacturers","It refines how overhead is assigned within either job-order or process costing"], a: 3, fb: "ABC is a finer lens on the same reality. Activity rates are still estimates, and ABC works for services and customers too." },
+ { ch: S8, q: "Which pairing best describes ABC versus ABM?", o: ["ABC: what does this activity cost? / ABM: should we still do it, and how could we do it better?","Both are backward-looking costing techniques","ABC: should we do this? / ABM: what does it cost?","ABM replaces ABC"], a: 0, fb: "ABC diagnoses (a costing technique); ABM treats (a management philosophy that acts on the data)." },
+ { ch: S8, q: "The test for whether an activity is value-added in process-value analysis is:", o: ["Whether it costs less than ₱10,000","Whether the customer would pay for it if they could see it happening","Whether it is necessary to run the plant","Whether it is performed by direct labor"], a: 1, fb: "Value is judged from the customer's perspective. Activities that transform the product pass the test." },
+ { ch: S8, q: "At Cordillera Craft Furniture, which activity is VALUE-ADDED?", o: ["Sanding and finishing","Moving cut pieces to the assembly station","Waiting for the finishing department","Inspecting the finished piece"], a: 0, fb: "Sanding and finishing transforms the product. Moving, waiting and inspecting add no product value." },
+ { ch: S8, q: "Which statement about inspection is correct?", o: ["It should be eliminated immediately in every case","It is value-added because quality matters","It is a prevention cost","It may be necessary, but it is still non-value-added"], a: 3, fb: "Necessary is not the same as value-added. A perfectly made product needs no inspection; prevention reduces the need for appraisal." },
+ { ch: S8, q: "Which is NOT one of the four ways to deal with a non-value-added activity?", o: ["Reduce","Share","Capitalize","Eliminate"], a: 2, fb: "The four responses are Eliminate, Reduce, Select (lowest-cost way) and Share (spread over more output)." },
+ { ch: S8, q: "Driver analysis goes beyond ABC by asking:", o: ["What is the selling price?","How much does this activity cost?","Which department incurred the cost?","Why does this activity happen at all, and this often?"], a: 3, fb: "It searches for root causes. Custom Bracket's 800 setups are a symptom; small batches, slow changeovers or poor scheduling could be the cause." },
+ { ch: S8, q: "The fishbone (cause-and-effect) diagram with six cause categories was developed by:", o: ["Kaoru Ishikawa","Taiichi Ohno of Toyota","Charles Kepner and Benjamin Tregoe","W. Edwards Deming"], a: 0, fb: "Kaoru Ishikawa, 1960s. The six categories: processes, equipment, materials, people, environment, management. The 5 Whys came from Toyota." },
+ { ch: S8, q: "A batch spends 4 hrs processing, 1 hr inspection, 2 hrs moving and 9 hrs waiting. Manufacturing cycle efficiency is:", o: ["33%","20%","25%","44%"], a: 2, fb: "Cycle time = 4 + 1 + 2 + 9 = 16 hrs. MCE = value-added (processing) ÷ cycle time = 4 ÷ 16 = 25%." },
+ { ch: S8, q: "A 200-unit order has a cycle time of 8 hours. Manufacturing velocity is:", o: ["40 units/hr","1,600 units/hr","16 units/hr","25 units/hr"], a: 3, fb: "Velocity = Units ÷ Cycle time = 200 ÷ 8 = 25 units per hour." },
+ { ch: S8, q: "A supplier charges ₱50/unit for 2,000 units. It also causes 40 defective units (₱200 rework each) and 3 rush orders (₱4,000 each). Total cost of ownership per unit:", o: ["₱54","₱60","₱50","₱56"], a: 1, fb: "TCO = 100,000 + (40 × 200 = 8,000) + (3 × 4,000 = 12,000) = ₱120,000 ÷ 2,000 = ₱60 per unit." },
+ { ch: S8, q: "Customer B (gross margin ₱140,000) consolidates to 250 orders and 300 deliveries. Rates: ₱100/order, ₱200/delivery. New operating profit:", o: ["(₱140,000)","₱55,000","₱85,000","₱140,000"], a: 1, fb: "Cost = 25,000 + 60,000 = ₱85,000. Profit = 140,000 − 85,000 = ₱55,000. Renegotiate before firing a customer." },
+ { ch: S8, q: "Under JIT, manufacturing cells group machines by:", o: ["Supplier","Product family, arranged in process sequence","Department budget","Machine type"], a: 1, fb: "Cells act as mini-factories for one product family, cutting moving and waiting time; workers become multifunction labor." },
+ { ch: S8, q: "The customer-profitability “whale curve” shows that:", o: ["Most customers are unprofitable and should be dropped","A few customers generate more than 100% of total profit while a long tail loses money","Profit is spread evenly across customers","Gross margin ranking equals operating-profit ranking"], a: 1, fb: "The insight is that profit is far more concentrated than gross-margin reports suggest, not that most customers are bad." },
+ { ch: S8, q: "ABM is best understood as an ongoing cycle closely related to the Japanese concept of:", o: ["Kaizen (continuous improvement)","Kanban","Poka-yoke","Keiretsu"], a: 0, fb: "Measure → identify waste → diagnose → act → re-measure, each cycle showing some improvement." }
+];
+
+      const TOTAL = Q.length;
+      const MODS = [...new Set(Q.map((q) => q.ch))];
+      const state = Q.map(() => null);
+      let view = "all";
+
+      function inView(i) { return view === "all" || Q[i].ch === view; }
+      function idxInView() { return Q.map((_, i) => i).filter(inView); }
+
+      function toggleSession(hd) {
+        const body = hd.nextElementSibling;
+        body.classList.toggle("open");
+        const open = body.classList.contains("open");
+        hd.setAttribute("aria-expanded", open ? "true" : "false");
+        hd.querySelector(".tag").textContent = open ? "－" : "＋";
+      }
+
+      function buildNav() {
+        const n = document.getElementById("nav");
+        const nb = document.createElement("button");
+        nb.textContent = "Notes";
+        nb.onclick = () => setView("notes", nb);
+        n.appendChild(nb);
+        const mk = (label, key) => {
+          const b = document.createElement("button");
+          b.textContent = label;
+          b.onclick = () => setView(key, b);
+          if (key === view) b.classList.add("active");
+          n.appendChild(b);
+        };
+        mk(`All · ${TOTAL}`, "all");
+        MODS.forEach((m) => {
+          const count = Q.filter((q) => q.ch === m).length;
+          mk(`${m.split("—")[0].trim().replace("Session ", "S")} · ${count}`, m);
+        });
+      }
+
+      function setView(key, btn) {
+        view = key;
+        document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const notes = key === "notes";
+        document.getElementById("notes-panel").style.display = notes ? "block" : "none";
+        document.getElementById("quiz-panel").style.display = notes ? "none" : "block";
+        document.getElementById("score-banner").style.display = notes ? "none" : "flex";
+        if (notes) { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+        buildExam();
+        upd();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function buildExam() {
+        const w = document.getElementById("ex-wrap");
+        w.innerHTML = "";
+        const ids = idxInView();
+        document.getElementById("view-title").textContent = view === "all" ? "All Sessions" : view.split("—")[0].trim();
+        document.getElementById("view-sub").textContent =
+          (view === "all" ? "" : view.split("—")[1].trim() + " | ") + `${ids.length} items | Multiple choice`;
+        let lc = "";
+        ids.forEach((i, k) => {
+          const q = Q[i];
+          if (q.ch !== lc) {
+            const d = document.createElement("div");
+            d.className = "ch-divider" + (lc === "" ? " first" : "");
+            d.textContent = q.ch;
+            w.appendChild(d);
+            lc = q.ch;
+          }
+          const c = document.createElement("div");
+          c.className = "q-card";
+          c.id = `qc${i}`;
+          c.innerHTML = `<div class="q-num"><span>Question ${k + 1} of ${ids.length}</span><span class="mark" id="qd${i}"></span></div>
+            <div class="q-text">${q.q}</div>
+            <div class="options" id="qo${i}">
+              ${q.o.map((o, j) => `<button class="option-btn" onclick="answer(${i},${j})">${"ABCD"[j]}. ${o}</button>`).join("")}
+            </div>
+            <div class="feedback" id="qf${i}" aria-live="polite"></div>`;
+          w.appendChild(c);
+          if (state[i] !== null) paint(i, state[i] ? q.a : q._pick);
+        });
+      }
+
+      function paint(i, s) {
+        const q = Q[i], c = document.getElementById(`qc${i}`), fb = document.getElementById(`qf${i}`), dl = document.getElementById(`qd${i}`);
+        document.querySelectorAll(`#qo${i} .option-btn`).forEach((b, j) => {
+          b.disabled = true;
+          if (j === q.a) b.classList.add("correct");
+          if (j === s && s !== q.a) b.classList.add("wrong");
+        });
+        fb.classList.add("show");
+        if (s === q.a) {
+          c.classList.add("answered-ok");
+          dl.textContent = "✓ Correct"; dl.className = "mark ok";
+          fb.textContent = "✓ Correct. " + q.fb;
+        } else {
+          c.classList.add("answered-bad");
+          dl.textContent = "✗ Wrong"; dl.className = "mark bad";
+          fb.textContent = "✗ Incorrect. The answer is " + "ABCD"[q.a] + ". " + q.fb;
+        }
+      }
+
+      function answer(i, s) {
+        if (state[i] !== null) return;
+        state[i] = s === Q[i].a;
+        Q[i]._pick = s;
+        paint(i, s);
+        upd();
+      }
+
+      function upd() {
+        const ids = idxInView();
+        const right = ids.filter((i) => state[i] === true).length;
+        const wrong = ids.filter((i) => state[i] === false).length;
+        const done = right + wrong;
+        document.getElementById("s-right").textContent = right;
+        document.getElementById("s-wrong").textContent = wrong;
+        document.getElementById("s-done").textContent = done;
+        document.getElementById("s-total").textContent = ids.length;
+        document.getElementById("ex-score-txt").textContent = `${right} / ${ids.length}`;
+        document.getElementById("ex-prog").style.width = (done / ids.length) * 100 + "%";
+        const box = document.getElementById("ex-result");
+        if (done === ids.length) showResult(ids, right, wrong); else box.classList.remove("show");
+      }
+
+      function showResult(ids, right, wrong) {
+        const pct = Math.round((right / ids.length) * 100);
+        document.getElementById("ex-big").textContent = `${right} / ${ids.length}`;
+        document.getElementById("ex-breakdown").textContent = `${right} correct | ${wrong} wrong | ${pct}%`;
+        const by = {};
+        ids.forEach((i) => {
+          const k = Q[i].ch;
+          if (!by[k]) by[k] = { n: 0, ok: 0 };
+          by[k].n++;
+          if (state[i]) by[k].ok++;
+        });
+        document.getElementById("ex-chapters").innerHTML = Object.keys(by)
+          .map((k) => `${k.split("—")[0].trim()}: ${by[k].ok}/${by[k].n} correct`)
+          .join("<br/>");
+        document.getElementById("ex-msg").textContent =
+          pct >= 90 ? "Excellent. You're ready for Quiz 2."
+          : pct >= 75 ? "Good. Retry the items you missed and review those sessions' worked examples."
+          : pct >= 60 ? "Passing. Focus on the sessions with the lowest scores above."
+          : "Go back to the notes for the weaker sessions, then retry the missed items.";
+        document.getElementById("ex-result").classList.add("show");
+      }
+
+      function retryMissed() {
+        idxInView().forEach((i) => { if (state[i] === false) state[i] = null; });
+        buildExam(); upd();
+        const first = idxInView().find((i) => state[i] === null);
+        if (first !== undefined) document.getElementById(`qc${first}`).scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function resetExam() {
+        idxInView().forEach((i) => (state[i] = null));
+        buildExam(); upd();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      buildNav();
+      buildExam();
+      upd();
+      document.querySelector("nav button").click();
+    </script>
+  </body>
+</html>
